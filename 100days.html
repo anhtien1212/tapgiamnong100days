@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tập Giảm Nọng 100 Days</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--accent:#10b981;--muted:#6b7280}
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); margin:0; padding:24px; color:#111827}
+    .wrap{max-width:760px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .header-left{display:flex;align-items:center;gap:12px}
+    img.avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;box-shadow:0 0 6px rgba(0,0,0,0.2)}
+    h1{font-size:20px;margin:0}
+    small{color:var(--muted)}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06);margin-bottom:12px}
+    .time{font-weight:600;color:var(--accent)}
+    .task-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed #eef2f7}
+    .task-row:last-child{border-bottom:0}
+    .task-desc{flex:1}
+    .note{font-size:13px;color:var(--muted)}
+    button, .btn{background:var(--accent);color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn-secondary{background:transparent;color:var(--accent);border:1px solid rgba(16,185,129,0.18)}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:8px}
+    .done{text-decoration:line-through;color:#9ca3af}
+    label.checkbox{display:flex;align-items:center;gap:8px;cursor:pointer}
+    input[type=checkbox]{width:18px;height:18px}
+    .progress-container{margin:18px 0}
+    .progress-bar{width:100%;height:18px;background:#e5e7eb;border-radius:10px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--accent);width:0%;transition:width .3s ease}
+    .progress-text{text-align:center;font-weight:600;margin-top:6px}
+    a{color:var(--accent);text-decoration:none;font-weight:600}
+    a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="header-left">
+        <img src="1986b88b-3023-42b7-9db7-9daef96694ae.png" alt="avatar" class="avatar">
+        <div>
+          <h1>Tập Giảm Nọng 100 Days</h1>
+          <small id="date"> </small>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="printBtn">In / Export</button>
+        <button id="resetBtn" class="btn-secondary">Đặt lại</button>
+      </div>
+    </header>
+
+    <div class="progress-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">Hoàn thành: 0%</div>
+    </div>
+
+    <div id="tasks"></div>
+
+    <footer>
+      © 2025 — Tập Giảm Nọng 100 Days | Truy cập: <a href="http://tapgiamnong" target="_blank">http://tapgiamnong</a>
+    </footer>
+  </div>
+
+  <script>
+    const tasksContainer = document.getElementById('tasks');
+    const totalDays = 100;
+    const today = new Date();
+    for (let i = 1; i <= totalDays; i++) {
+      const taskDate = new Date();
+      taskDate.setDate(today.getDate() + i - 1);
+      const d = taskDate.toLocaleDateString('vi-VN');
+      const div = document.createElement('div');
+      div.className = 'card task-row';
+      div.innerHTML = `<label class="checkbox"><input type="checkbox" class="chk"><span class="task-desc">Ngày ${i} (${d}): Uống 2 bịch rau cần cây + Tập cơ hàm buổi tối</span></label>`;
+      tasksContainer.appendChild(div);
+    }
+
+    function updateProgress(){
+      const checks=document.querySelectorAll('.chk');
+      const done=Array.from(checks).filter(c=>c.checked).length;
+      const percent=Math.round(done/totalDays*100);
+      document.getElementById('progressFill').style.width=percent+'%';
+      document.getElementById('progressText').innerText=`Hoàn thành: ${percent}%`;
+    }
+
+    document.addEventListener('change',e=>{if(e.target.classList.contains('chk'))updateProgress()});
+    document.getElementById('resetBtn').onclick=()=>{document.querySelectorAll('.chk').forEach(c=>c.checked=false);updateProgress()};
+    document.getElementById('printBtn').onclick=()=>window.print();
+    document.getElementById('date').innerText = new Date().toLocaleDateString('vi-VN');
+  </script>
+</body>
+</html>
